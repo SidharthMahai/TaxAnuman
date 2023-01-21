@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 import "./exemptions.css";
 import React, { useState } from "react";
+import CustomTable from "../CustomTable";
 function HouseRentAllowance() {
   let [basicSalaryReceived, setBasicSalary] = useState(0);
   let [daReceived, setDaReceived] = useState(0);
@@ -21,17 +22,23 @@ function HouseRentAllowance() {
   let [arr, setArr] = useState([]);
   let [exemptedAmount, setExemptedAmount] = useState(0);
   let [chargeableTotax, setChargeableTotax] = useState(0);
+  let [columns, setColumns] = useState([]);
+  let [rows, setRows] = useState([{}]);
 
   function calculateHRAExemption() {
-    if (!basicSalaryReceived || !hraReceived || !rentPaid) {
+    var HRA = hraReceived == "" ? 0 : parseInt(hraReceived);
+    var BS = basicSalaryReceived == "" ? 0 : parseInt(basicSalaryReceived);
+    var DA = daReceived == "" ? 0 : parseInt(daReceived);
+    var RP = rentPaid == "" ? 0 : parseInt(rentPaid);
+    setArr([]);
+    setColumns([]);
+    setRows([{}]);
+    setExemptedAmount(0);
+    setChargeableTotax(0);
+    if (BS < 1 || HRA < 1 || RP < 1) {
       setError(true);
     } else {
       setError(false);
-      setArr([]);
-      var HRA = parseInt(hraReceived);
-      var BS = parseInt(basicSalaryReceived);
-      var DA = parseInt(daReceived);
-      var RP = parseInt(rentPaid);
       var formulaOne = HRA;
       let sumOfBPAndDA = BS + DA;
       var formulaTwo = isMetroCity
@@ -41,8 +48,38 @@ function HouseRentAllowance() {
       arr.push(formulaOne);
       arr.push(formulaTwo);
       arr.push(formulaThree);
-      setExemptedAmount(Math.min(...arr));
-      setChargeableTotax(RP - exemptedAmount);
+      var exempted = Math.min(...arr);
+      var chargeable = RP - exempted;
+      var percentage = isMetroCity ? "50%" : "40%";
+      setExemptedAmount(exempted);
+      setChargeableTotax(chargeable);
+      var columns = [];
+      columns.push("Calculation");
+      columns.push("Value");
+      setColumns(columns);
+      var rows = [
+        {
+          id: 1,
+          rowValues: ["Actual HRA received", formulaOne],
+        },
+        {
+          id: 2,
+          rowValues: [percentage + " of Basic Salary", formulaTwo],
+        },
+        {
+          id: 3,
+          rowValues: ["Rent Paid in excess of 10% of salary", formulaThree],
+        },
+        {
+          id: 4,
+          rowValues: ["HRA Exempted", exempted],
+        },
+        {
+          id: 5,
+          rowValues: ["HRA Chargeable to tax", chargeable],
+        },
+      ];
+      setRows(rows);
     }
   }
 
@@ -130,8 +167,14 @@ function HouseRentAllowance() {
         <br></br>
         {isError && "Please Fill All Required Fields"}
         {exemptedAmount != 0 && "Exempted HRA Amount: " + exemptedAmount}
+        {exemptedAmount != 0 && (
+          <CustomTable
+            heading="Exemption Calculation Explained"
+            columns={columns}
+            rows={rows}
+          />
+        )}
       </Container>
-
     </div>
   );
 }
