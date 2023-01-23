@@ -1,15 +1,15 @@
 import {
   FormControl,
   FormLabel,
-  Input,
-  FormErrorMessage,
   HStack,
   Container,
   Radio,
   RadioGroup,
   Button,
+  Select,
 } from "@chakra-ui/react";
 import "./exemptions.css";
+import "./../myLib.css";
 import React, { useState } from "react";
 import CustomTable from "../CustomTable";
 function HouseRentAllowance() {
@@ -24,6 +24,20 @@ function HouseRentAllowance() {
   let [chargeableTotax, setChargeableTotax] = useState(0);
   let [columns, setColumns] = useState([]);
   let [rows, setRows] = useState([{}]);
+  var months = [
+    { monthNumber: 1, monthName: "April" },
+    { monthNumber: 2, monthName: "May" },
+    { monthNumber: 3, monthName: "June" },
+    { monthNumber: 4, monthName: "July" },
+    { monthNumber: 5, monthName: "August" },
+    { monthNumber: 6, monthName: "September" },
+    { monthNumber: 7, monthName: "October" },
+    { monthNumber: 8, monthName: "November" },
+    { monthNumber: 9, monthName: "December" },
+    { monthNumber: 10, monthName: "January" },
+    { monthNumber: 11, monthName: "February" },
+    { monthNumber: 12, monthName: "March" },
+  ];
 
   function calculateHRAExemption() {
     var HRA = hraReceived == "" ? 0 : parseInt(hraReceived);
@@ -85,14 +99,15 @@ function HouseRentAllowance() {
 
   return (
     <div>
-      <Container className="container">
+      <Container className="container custom-glass-effect">
         <span className="heading">
           House Rent Allowance Exemption Calculator
         </span>
         <FormControl isRequired className="column-input">
           <HStack>
             <FormLabel>Basic Salary:</FormLabel>
-            <Input
+            <input
+              className="custom-input"
               width="25%"
               type="number"
               onChange={(e) => setBasicSalary(e.target.value)}
@@ -104,7 +119,8 @@ function HouseRentAllowance() {
         <FormControl className="column-input">
           <HStack>
             <FormLabel>DA Received:</FormLabel>
-            <Input
+            <input
+              className="custom-input"
               width="25%"
               type="number"
               onChange={(e) => setDaReceived(e.target.value)}
@@ -116,7 +132,8 @@ function HouseRentAllowance() {
         <FormControl isRequired className="column-input">
           <HStack>
             <FormLabel>HRA Received:</FormLabel>
-            <Input
+            <input
+              className="custom-input"
               width="25%"
               type="number"
               onChange={(e) => setHraReceived(e.target.value)}
@@ -128,7 +145,8 @@ function HouseRentAllowance() {
         <FormControl isRequired className="column-input">
           <HStack>
             <FormLabel>House Rent Paid:</FormLabel>
-            <Input
+            <input
+              className="custom-input"
               width="25%"
               type="number"
               onChange={(e) => setRentPaid(e.target.value)}
