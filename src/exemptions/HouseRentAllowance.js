@@ -38,6 +38,27 @@ function HouseRentAllowance() {
     { monthNumber: 11, monthName: "February" },
     { monthNumber: 12, monthName: "March" },
   ];
+  let [fromMonth, setFromMonth] = useState();
+  let [toMonth, setToMonth] = useState();
+  let [toMonthDisabled, setToMonthDisabled] = useState(1);
+
+  function fromMonthClick(monthNumber) {
+    if (monthNumber == "") {
+    } else {
+      setToMonthDisabled(0);
+      setFromMonth(parseInt(monthNumber));
+      if(toMonth < parseInt(monthNumber) && toMonth!=0) {
+        setToMonth(0);
+      }
+    }
+  }
+
+  function toMonthClick(monthNumber) {
+    if (monthNumber == "") {
+    } else {
+      setToMonth(parseInt(monthNumber));
+    }
+  }
 
   function calculateHRAExemption() {
     var HRA = hraReceived == "" ? 0 : parseInt(hraReceived);
@@ -65,6 +86,14 @@ function HouseRentAllowance() {
       var exempted = Math.min(...arr);
       var chargeable = RP - exempted;
       var percentage = isMetroCity ? "50%" : "40%";
+      if (fromMonth >= 1 && toMonth >= 1) {
+        var numberOfMonths = toMonth - fromMonth + 1;
+        exempted = exempted * numberOfMonths;
+        chargeable = chargeable * numberOfMonths;
+        formulaOne = formulaOne * numberOfMonths;
+        formulaTwo = formulaTwo * numberOfMonths;
+        formulaThree = formulaThree * numberOfMonths;
+      }
       setExemptedAmount(exempted);
       setChargeableTotax(chargeable);
       var columns = [];
@@ -152,6 +181,40 @@ function HouseRentAllowance() {
               onChange={(e) => setRentPaid(e.target.value)}
               value={rentPaid}
             />
+          </HStack>
+        </FormControl>
+
+        <FormControl className="column-input">
+          <HStack>
+            <FormLabel>Select Months Period:</FormLabel>
+            <HStack>
+              <Select
+                onChange={(e) => fromMonthClick(e.target.value)}
+                placeholder="Select"
+                width="50%"
+              >
+                {months.map((e) => (
+                  <option key={e.monthNumber} value={e.monthNumber}>
+                    {e.monthName}
+                  </option>
+                ))}
+              </Select>
+              <Select
+                onChange={(e) => toMonthClick(e.target.value)}
+                disabled={toMonthDisabled}
+                placeholder="Select"
+                width="50%"
+              >
+                {months.map(
+                  (e) =>
+                    e.monthNumber >= fromMonth && (
+                      <option key={e.monthNumber} value={e.monthNumber}>
+                        {e.monthName}
+                      </option>
+                    )
+                )}
+              </Select>
+            </HStack>
           </HStack>
         </FormControl>
 
