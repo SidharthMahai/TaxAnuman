@@ -7,6 +7,7 @@ import {
   RadioGroup,
   Button,
   Select,
+  Center
 } from "@chakra-ui/react";
 import "./exemptions.css";
 import "./../myLib.css";
@@ -47,7 +48,7 @@ function HouseRentAllowance() {
     } else {
       setToMonthDisabled(0);
       setFromMonth(parseInt(monthNumber));
-      if(toMonth < parseInt(monthNumber) && toMonth!=0) {
+      if (toMonth < parseInt(monthNumber) && toMonth != 0) {
         setToMonth(0);
       }
     }
@@ -129,95 +130,64 @@ function HouseRentAllowance() {
   return (
     <div>
       <Container className="container custom-glass-effect">
-        <span className="heading">
+        <div className="custom-heading">
           House Rent Allowance Exemption Calculator
-        </span>
-        <FormControl isRequired className="column-input">
-          <HStack>
-            <FormLabel>Basic Salary:</FormLabel>
-            <input
-              className="custom-input"
-              width="25%"
-              type="number"
-              onChange={(e) => setBasicSalary(e.target.value)}
-              value={basicSalaryReceived}
-            />
-          </HStack>
-        </FormControl>
-
-        <FormControl className="column-input">
-          <HStack>
-            <FormLabel>DA Received:</FormLabel>
-            <input
-              className="custom-input"
-              width="25%"
-              type="number"
-              onChange={(e) => setDaReceived(e.target.value)}
-              value={daReceived}
-            />
-          </HStack>
-        </FormControl>
-
-        <FormControl isRequired className="column-input">
-          <HStack>
-            <FormLabel>HRA Received:</FormLabel>
-            <input
-              className="custom-input"
-              width="25%"
-              type="number"
-              onChange={(e) => setHraReceived(e.target.value)}
-              value={hraReceived}
-            />
-          </HStack>
-        </FormControl>
-
-        <FormControl isRequired className="column-input">
-          <HStack>
-            <FormLabel>House Rent Paid:</FormLabel>
-            <input
-              className="custom-input"
-              width="25%"
-              type="number"
-              onChange={(e) => setRentPaid(e.target.value)}
-              value={rentPaid}
-            />
-          </HStack>
-        </FormControl>
-
-        <FormControl className="column-input">
-          <HStack>
-            <FormLabel>Select Months Period:</FormLabel>
+        </div>
+        <HStack>
+          <FormControl isRequired className="column-input">
             <HStack>
-              <Select
-                onChange={(e) => fromMonthClick(e.target.value)}
-                placeholder="Select"
+              <FormLabel width="50%">Basic Salary:</FormLabel>
+              <input
+                className="custom-input"
                 width="50%"
-              >
-                {months.map((e) => (
-                  <option key={e.monthNumber} value={e.monthNumber}>
-                    {e.monthName}
-                  </option>
-                ))}
-              </Select>
-              <Select
-                onChange={(e) => toMonthClick(e.target.value)}
-                disabled={toMonthDisabled}
-                placeholder="Select"
-                width="50%"
-              >
-                {months.map(
-                  (e) =>
-                    e.monthNumber >= fromMonth && (
-                      <option key={e.monthNumber} value={e.monthNumber}>
-                        {e.monthName}
-                      </option>
-                    )
-                )}
-              </Select>
+                type="number"
+                onChange={(e) => setBasicSalary(e.target.value)}
+                value={basicSalaryReceived}
+              />
             </HStack>
-          </HStack>
-        </FormControl>
+          </FormControl>
 
+          <FormControl className="column-input">
+            <HStack>
+              {" "}
+              <FormLabel width="50%">DA Received:</FormLabel>
+              <input
+                className="custom-input"
+                width="50%"
+                type="number"
+                onChange={(e) => setDaReceived(e.target.value)}
+                value={daReceived}
+              />
+            </HStack>
+          </FormControl>
+        </HStack>
+        <HStack>
+          <FormControl isRequired className="column-input">
+            <HStack>
+              <FormLabel width="50%">HRA Received:</FormLabel>
+              <input
+                className="custom-input"
+                width="50%"
+                type="number"
+                onChange={(e) => setHraReceived(e.target.value)}
+                value={hraReceived}
+              />
+            </HStack>
+          </FormControl>
+
+          <FormControl isRequired className="column-input">
+            <HStack>
+              <FormLabel width="50%">Rent Paid:</FormLabel>
+              <input
+                className="custom-input"
+                width="50%"
+                type="number"
+                onChange={(e) => setRentPaid(e.target.value)}
+                value={rentPaid}
+              />
+            </HStack>
+          </FormControl>
+        </HStack>
         <RadioGroup className="column-input" value={isMetroCity}>
           <HStack>
             <FormLabel>Living in Delhi, Mumbai, Kolkata or Chennai?</FormLabel>
@@ -237,14 +207,49 @@ function HouseRentAllowance() {
             </Radio>
           </HStack>
         </RadioGroup>
+        <FormControl className="column-input">
+          <HStack>
+            <FormLabel width="36%">Select Months Period:</FormLabel>
+            <HStack>
+              <Select
+                onChange={(e) => fromMonthClick(e.target.value)}
+                placeholder="Select"
+                width="50%"
+              >
+                {months.map((e) => (
+                  <option key={e.monthNumber} value={e.monthNumber}>
+                    {e.monthName}
+                  </option>
+                ))}
+              </Select>
+              <FormLabel style={{fontWeight:'normal'}} width="10%">To:</FormLabel>
+              <Select
+                onChange={(e) => toMonthClick(e.target.value)}
+                disabled={toMonthDisabled}
+                placeholder="Select"
+                width="50%"
+              >
+                {months.map(
+                  (e) =>
+                    e.monthNumber >= fromMonth && (
+                      <option key={e.monthNumber} value={e.monthNumber}>
+                        {e.monthName}
+                      </option>
+                    )
+                )}
+              </Select>
+            </HStack>
+          </HStack>
+        </FormControl>
 
-        <Button
+        <Center><Button style={{textAlign: 'center'}}
           onClick={calculateHRAExemption}
           className="button"
           colorScheme="blue"
         >
           Calculate
         </Button>
+        </Center>
         <br></br>
         {isError && "Please Fill All Required Fields"}
         {exemptedAmount != 0 && "Exempted HRA Amount: " + exemptedAmount}
