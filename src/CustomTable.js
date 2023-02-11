@@ -26,7 +26,7 @@ function CustomTable(props) {
         </Thead>
         <Tbody>
           {rows.map((row) => (
-            <Tr>
+            <Tr key={row.id}>
               {row.rowValues.map((e) => (
                 <Td>{e}</Td>
               ))}
