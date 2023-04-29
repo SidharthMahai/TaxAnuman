@@ -8,20 +8,32 @@ import {
   Td,
   TableCaption,
   TableContainer,
+  IconButton,
 } from "@chakra-ui/react";
+import { EditIcon, DeleteIcon } from "@chakra-ui/icons";
 import React, { useState } from "react";
-function CustomTable(props) {
-  var columns = props.columns;
-  var rows = props.rows;
+function CustomTable({
+  columns,
+  rows,
+  actions,
+  onChangeEdit,
+  onChangeDelete,
+  heading,
+}) {
   return (
     <TableContainer>
       <Table variant="striped" colorScheme="teal">
-        <TableCaption>{props.heading}</TableCaption>
+        <TableCaption>{heading}</TableCaption>
         <Thead>
           <Tr>
             {columns.map((e) => (
               <Th>{e}</Th>
             ))}
+            {actions === "true" && (
+              <>
+                <Th>Actions</Th>
+              </>
+            )}
           </Tr>
         </Thead>
         <Tbody>
@@ -30,6 +42,23 @@ function CustomTable(props) {
               {row.rowValues.map((e) => (
                 <Td>{e}</Td>
               ))}
+              {actions && rows && rows[0].rowValues[0] &&  (
+                <>
+                  <Td>
+                    <IconButton
+                      style={{marginRight: 3}}
+                      colorScheme="blue"
+                      icon={<EditIcon />}
+                      onClick={() => onChangeEdit(row)}
+                    />
+                    <IconButton
+                      colorScheme="red"
+                      icon={<DeleteIcon />}
+                      onClick={() => onChangeDelete(row)}
+                    />
+                  </Td>
+                </>
+              )}
             </Tr>
           ))}
         </Tbody>

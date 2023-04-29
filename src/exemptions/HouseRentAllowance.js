@@ -38,7 +38,7 @@ function HouseRentAllowance() {
     "Rent Paid",
     "Is Metro City?",
     "From Month",
-    "To Month",
+    "To Month"
   ]);
   var months = [
     { monthNumber: 1, monthName: "April" },
@@ -113,6 +113,29 @@ function HouseRentAllowance() {
     return isValid;
   }
 
+  function onChangeEdit(row) {
+    setBulkRows(bulkRows.filter(a => a.id != row.id))
+    setBasicSalary(row.rowValues[0])
+    setDaReceived(row.rowValues[1])
+    setHraReceived(row.rowValues[2])
+    setRentPaid(row.rowValues[3])
+    setIsMetroCity(row.rowValues[4])
+    var fromMonth = months.map(m => {
+      if(m.monthNumber === row.rowValues[5])
+        return m.monthName
+    })
+    var toMonth = months.map(m => {
+      if(m.monthNumber === row.rowValues[6])
+        return m.monthName
+    })
+    setFromMonth(fromMonth)
+    setToMonth(toMonth)
+  }
+
+  function onChangeDelete(row) {
+    setBulkRows(bulkRows.filter(a => a.id != row.id))
+  }
+
   function addNewValueInTable() {
     var HRA = hraReceived === "" ? 0 : parseInt(hraReceived);
     var BS = basicSalaryReceived === "" ? 0 : parseInt(basicSalaryReceived);
@@ -145,7 +168,7 @@ function HouseRentAllowance() {
         setDaReceived(0);
         setRentPaid(0);
         setIsMetroCity(1);
-        setFromMonth();
+        setFromMonth("April");
         setToMonth();
       } else {
         setError(true);
@@ -466,6 +489,9 @@ function HouseRentAllowance() {
             heading="Multiple Value Changes"
             columns={bulkColumns}
             rows={bulkRows}
+            actions="true"
+            onChangeEdit={onChangeEdit}
+            onChangeDelete={onChangeDelete}
           />
         )}
 
